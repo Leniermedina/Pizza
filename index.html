@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería El Sabor</title>
+    <style>
+        :root {
+            --color-primario: #e74c3c;
+            --color-secundario: #f39c12;
+            --color-texto: #fff;
+            --color-borde: rgba(255, 255, 255, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            color: var(--color-texto);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header-bg, .main-bg, .footer-bg {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+        
+        .header-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('imagenes/fondo-superior.jpg');
+            min-height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .main-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('imagenes/fondo-central.jpg');
+            flex-grow: 1;
+        }
+        
+        .footer-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('imagenes/fondo-inferior.jpg');
+            min-height: 20vh;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: var(--color-secundario);
+        }
+        
+        .slogan {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .section {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--color-borde);
+            backdrop-filter: blur(5px);
+        }
+        
+        h2 {
+            color: var(--color-secundario);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        
+        .productos {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid var(--color-borde);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 2px solid var(--color-secundario);
+        }
+        
+        .card h3 {
+            color: var(--color-secundario);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .card p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .precio {
+            font-weight: bold;
+            color: var(--color-secundario);
+            font-size: 1.2rem;
+        }
+        
+        .boton {
+            background-color: var(--color-primario);
+            color: white;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+        
+        .boton:hover {
+            background-color: #c0392b;
+        }
+        
+        #listaCarrito {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        
+        #listaCarrito li {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--color-borde);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--color-borde);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        
+        .total {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: var(--color-secundario);
+        }
+        
+        .campo-hora {
+            margin-bottom: 1rem;
+        }
+
+        .campo-hora label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-secundario);
+            font-weight: bold;
+        }
+
+        .campo-hora small {
+            display: block;
+            font-size: 0.8rem;
+            color: #ccc;
+            margin-top: 0.3rem;
+        }
+        
+        @media (min-width: 768px) {
+            .productos {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado con fondo personalizable -->
+    <div class="header-bg">
+        <div class="container">
+            <h1 class="logo">Pizzería El Sabor</h1>
+            <p class="slogan">Las auténticas pizzas artesanales de Caibarién - Abierto de 6 PM a 11 PM</p>
+        </div>
+    </div>
+
+    <!-- Contenido principal con fondo personalizable -->
+    <main class="main-bg">
+        <div class="container">
+            <section class="section">
+                <h2>Nuestras Especialidades</h2>
+                <div class="productos">
+                    <!-- Producto 1 -->
+                    <div class="card">
+                        <img src="imagenes/pizza-margarita.jpg" alt="Pizza Margarita">
+                        <h3>Margarita Clásica</h3>
+                        <p>Salsa de tomate, mozzarella y albahaca fresca</p>
+                        <p class="precio">$8.99</p>
+                        <button class="boton" onclick="añadirAlCarrito('Pizza Margarita', 8.99)">Añadir al carrito</button>
+                    </div>
+                    
+                    <!-- Producto 2 -->
+                    <div class="card">
+                        <img src="imagenes/pizza-hawaiana.jpg" alt="Pizza Hawaiana">
+                        <h3>Hawaiana Especial</h3>
+                        <p>Jamón, piña, mozzarella y salsa barbacoa</p>
+                        <p class="precio">$10.99</p>
+                        <button class="boton" onclick="añadirAlCarrito('Pizza Hawaiana', 10.99)">Añadir al carrito</button>
+                    </div>
+                    
+                    <!-- Producto 3 -->
+                    <div class="card">
+                        <img src="imagenes/pizza-pepperoni.jpg" alt="Pizza Pepperoni">
+                        <h3>Pepperoni Picante</h3>
+                        <p>Doble pepperoni, jalapeños y salsa de tomate</p>
+                        <p class="precio">$9.99</p>
+                        <button class="boton" onclick="añadirAlCarrito('Pizza Pepperoni', 9.99)">Añadir al carrito</button>
+                    </div>
+                    
+                    <!-- Producto 4 -->
+                    <div class="card">
+                        <img src="imagenes/pizza-quesos.jpg" alt="Pizza 4 Quesos">
+                        <h3>Cuatro Quesos</h3>
+                        <p>Mezcla de mozzarella, gorgonzola, parmesano y fontina</p>
+                        <p class="precio">$11.99</p>
+                        <button class="boton" onclick="añadirAlCarrito('Pizza 4 Quesos', 11.99)">Añadir al carrito</button>
+                    </div>
+                    
+                    <!-- Producto 5 -->
+                    <div class="card">
+                        <img src="imagenes/pizza-vegetariana.jpg" alt="Pizza Vegetariana">
+                        <h3>Vegetariana</h3>
+                        <p>Verduras frescas de temporada y queso de cabra</p>
+                        <p class="precio">$9.49</p>
+                        <button class="boton" onclick="añadirAlCarrito('Pizza Vegetariana', 9.49)">Añadir al carrito</button>
+                    </div>
+                    
+                    <!-- Producto 6 -->
+                    <div class="card">
+                        <img src="imagenes/refresco.jpg" alt="Refresco">
+                        <h3>Refresco 500ml</h3>
+                        <p>Coca-Cola, Fanta o Sprite</p>
+                        <p class="precio">$1.99</p>
+                        <button class="boton" onclick="añadirAlCarrito('Refresco 500ml', 1.99)">Añadir al carrito</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Tu Pedido</h2>
+                <ul id="listaCarrito"></ul>
+                <div class="total">Total: $<span id="totalCarrito">0.00</span></div>
+            </section>
+
+            <section class="section">
+                <h2>Completa tu Pedido</h2>
+                <form id="formPedido">
+                    <input type="text" id="nombre" placeholder="Nombre completo" required>
+                    <input type="tel" id="telefono" placeholder="Teléfono" required>
+                    <input type="text" id="direccion" placeholder="Dirección en Caibarién" required>
+                    
+                    <!-- Campo de hora manual -->
+                    <div class="campo-hora">
+                        <label for="hora">Hora deseada de entrega:</label>
+                        <input 
+                            type="text" 
+                            id="hora" 
+                            placeholder="Ej: 7:30 PM" 
+                            pattern="[0-9]{1,2}:[0-9]{2}\s?(PM|pm)" 
+                            title="Horario de entrega: 6:00 PM a 11:00 PM" 
+                            required
+                        >
+                        <small>Ingresa la hora entre 6:00 PM y 11:00 PM</small>
+                    </div>
+                    
+                    <button type="button" class="boton" onclick="enviarPedido()">Enviar Pedido por SMS</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Pie de página con fondo personalizable -->
+    <div class="footer-bg">
+        <div class="container">
+            <p>© 2023 Pizzería El Sabor</p>
+            <p>Horario de entrega: 6:00 PM - 11:00 PM</p>
+            <p>Teléfono: +53 5XXXXXXX</p>
+        </div>
+    </div>
+
+    <script>
+        let carrito = [];
+        let total = 0;
+
+        function añadirAlCarrito(nombre, precio) {
+            carrito.push({nombre: nombre, precio: precio});
+            total += precio;
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            const lista = document.getElementById('listaCarrito');
+            lista.innerHTML = '';
+            
+            carrito.forEach((item, index) => {
+                const li = document.createElement('li');
+                
+                const nombreSpan = document.createElement('span');
+                nombreSpan.textContent = `${item.nombre} - $${item.precio.toFixed(2)}`;
+                
+                const eliminarBtn = document.createElement('button');
+                eliminarBtn.textContent = '❌';
+                eliminarBtn.style.marginLeft = '10px';
+                eliminarBtn.style.background = 'none';
+                eliminarBtn.style.border = 'none';
+                eliminarBtn.style.cursor = 'pointer';
+                eliminarBtn.style.color = 'red';
+                eliminarBtn.onclick = () => eliminarDelCarrito(index);
+                
+                li.appendChild(nombreSpan);
+                li.appendChild(eliminarBtn);
+                lista.appendChild(li);
+            });
+            
+            document.getElementById('totalCarrito').textContent = total.toFixed(2);
+        }
+
+        function eliminarDelCarrito(index) {
+            total -= carrito[index].precio;
+            carrito.splice(index, 1);
+            actualizarCarrito();
+        }
+
+        function enviarPedido() {
+            const nombre = document.getElementById('nombre').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const direccion = document.getElementById('direccion').value.trim();
+            const horaInput = document.getElementById('hora').value.trim().toUpperCase();
+            
+            // Validación básica
+            if (!nombre || !telefono || !direccion || !horaInput || carrito.length === 0) {
+                alert('Por favor completa todos los campos y añade al menos un producto al carrito.');
+                return;
+            }
+            
+            // Validación avanzada de hora
+            const horaRegex = /^([6-9]|10|11):[0-5][0-9]\s?PM$/i;
+            if (!horaRegex.test(horaInput)) {
+                alert('Por favor ingresa una hora válida entre 6:00 PM y 11:00 PM (ej: 8:30 PM)');
+                return;
+            }
+            
+            // Formatear hora (asegurar formato consistente)
+            const hora = horaInput.replace(/\s?PM/i, ' PM');
+
+            const productosTexto = carrito.map(item => 
+                `${item.nombre} - $${item.precio.toFixed(2)}`
+            ).join('%0A');
+            
+            const mensaje = `PEDIDO PIZZERÍA EL SABOR%0A%0A` +
+                            `📋 *Productos:*%0A${productosTexto}%0A%0A` +
+                            `💰 *Total:* $${total.toFixed(2)}%0A%0A` +
+                            `👤 *Cliente:* ${nombre}%0A` +
+                            `📞 *Teléfono:* ${telefono}%0A` +
+                            `🏠 *Dirección:* ${direccion}%0A` +
+                            `⏰ *Hora deseada:* ${hora}`;
+            
+            const telefonoDestino = '+535XXXXXXXX'; // ¡Cambia por tu número!
+            const enlaceSMS = `sms:${telefonoDestino}?body=${mensaje}`;
+
+            window.location.href = enlaceSMS;
+        }
+    </script>
+</body>
+</html>
